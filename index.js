@@ -1,7 +1,7 @@
 import express from 'express';
 import { headers } from './utils.js';
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.get('/', async (req, res) => {
 	var url = 'https://transit.ttc.com.ge/pis-gateway/api/v2/routes?modes=BUS';
