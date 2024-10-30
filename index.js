@@ -15,6 +15,9 @@ app.get('/', async (req, res) => {
 	res.send(JSON.stringify(data));
 });
 
-app.listen(port, () => {
+let server = app.listen(port, () => {
 	console.log(`Example app listening on port ${port}`);
 });
+
+server.keepAliveTimeout = 120 * 1000;
+server.headersTimeout = 120 * 1000;
