@@ -10,18 +10,19 @@ export async function updateLines(is_updating) {
       console.log("Updating lines interrupted");
       break;
     }
-    console.log(`updating polylines ${Math.floor((index * 100) / routes.length)}%`);
+    is_updating.setLog(`Updating polylines ${Math.floor((index * 100) / routes.length)}%`);
+
     index++;
     let route = r.route;
     let busID = r.id;
     for (let forward of [0, 1]) {
+      await sleep(5000);
       let data = await _fetch(`https://transit.ttc.com.ge/pis-gateway/api/v2/routes/${busID}/polyline?forward=${forward}`);
       if (!data) continue;
 
       let polyline = data.encodedValue;
 
       values.push(`('${route}','${forward}','${polyline}')`);
-      await sleep(5000);
     }
   }
   if (values.length === 0) return;

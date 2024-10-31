@@ -11,11 +11,13 @@ export async function updateSchedules(is_updating) {
       console.log("Updating schedules interrupted");
       break;
     }
-    console.log(`updating schedules ${Math.floor((index * 100) / routes.length)}%`);
+    is_updating.setLog(`Updating schedules ${Math.floor((index * 100) / routes.length)}%`);
+
     index++;
     let route = r.route;
     let busID = r.id;
     for (let forward of [0, 1]) {
+      await sleep(5000);
       let description = await _fetch(`https://transit.ttc.com.ge/pis-gateway/api/v2/routes/${busID}/scheme?forward=${forward}&locale=ka`);
       await sleep(5000);
       let schedule = await _fetch(`https://transit.ttc.com.ge/pis-gateway/api/v2/routes/${busID}/schedule?forward=${forward}&locale=ka`);
@@ -30,7 +32,6 @@ export async function updateSchedules(is_updating) {
           schedulesValue.push(`('${route}','${weekdaySchedule.fromDay}','${weekdaySchedule.toDay}','${stop.id.replaceAll("1:", "")}','${stop.arrivalTimes}','${forward}')`);
         }
       }
-      await sleep(5000);
     }
   }
 

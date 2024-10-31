@@ -2,9 +2,13 @@ import { query } from "./db.js";
 import { _fetch } from "./utils.js";
 
 export async function updateStops(is_updating) {
-  console.log("updating stops 0%");
+  is_updating.setLog("updating stops 0%");
   let url = "https://transit.ttc.com.ge/pis-gateway/api/v2/stops?locale=ka";
   let data = await _fetch(url);
+  if (!data) {
+    is_updating.setLog("Something went wrong");
+    return;
+  }
 
   data = data.filter((r) => r.vehicleMode === "BUS");
   let values = [];
@@ -17,5 +21,6 @@ export async function updateStops(is_updating) {
 		truncate stops;
 		INSERT INTO stops(stopID, name, lat, lon) VALUES ${values.join(",")}
 		`);
-  console.log("updating stops 100%");
+
+  is_updating.setLog("updating stops 100%");
 }

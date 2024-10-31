@@ -8,6 +8,11 @@ const app = express();
 const port = process.env.PORT || 3000;
 let is_updating = {
   value: false,
+  log: "",
+  setLog: (log) => {
+    is_updating.log = log;
+    console.log(log);
+  },
 };
 app.get("/", async (req, res) => {
   var url = "https://transit.ttc.com.ge/pis-gateway/api/v2/routes?modes=BUS";
@@ -20,21 +25,25 @@ app.get("/", async (req, res) => {
   res.send(JSON.stringify(data));
 });
 app.get("/update", async (req, res) => {
-  if (is_updating.value) {
-    res.send("Updating in progress");
+  if (is_updating.value === true) {
+    res.send("Updating in progress \n" + is_updating.log);
     return;
   }
   is_updating.value = true;
   let run = async () => {
-    let functions = [updateRoutes, updateStops, updateLines, updateSchedules];
-    for (let f of functions) {
+    let interval = setInterval(() => {
+      fetch(`https://render-proxy-1-i5fu.onrender.com/ping`);
+    }, 780000);
+    let updaters = [updateRoutes, updateStops, updateLines, updateSchedules];
+    for (let update of updaters) {
       if (is_updating.value === false) {
         console.log("Update interrupted");
         break;
       }
-      await f(is_updating);
+      await update(is_updating);
     }
     is_updating.value = false;
+    clearInterval(interval);
   };
   run();
   res.send("Update started");
@@ -43,6 +52,10 @@ app.get("/update", async (req, res) => {
 app.get("/stop", async (req, res) => {
   is_updating.value = false;
   res.send("Update stopped");
+});
+app.get("/ping", async (req, res) => {
+  console.log("service is alive");
+  res.send("service is alive");
 });
 
 let server = app.listen(port, () => {

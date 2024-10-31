@@ -2,9 +2,13 @@ import { query } from "./db.js";
 import { _fetch } from "./utils.js";
 
 export async function updateRoutes(is_updating) {
-  console.log("updating routes 0%");
+  is_updating.setLog("updating routes 0%");
   let url = "https://transit.ttc.com.ge/pis-gateway/api/v2/routes?modes=BUS";
   const data = await _fetch(url);
+  if (!data) {
+    is_updating.setLog("Something went wrong");
+    return;
+  }
 
   let values = [];
   for (let route of data) {
@@ -15,5 +19,6 @@ export async function updateRoutes(is_updating) {
     truncate routes;
     INSERT INTO routes(id,route,name) VALUES ${values.join(",")};
     `);
-  console.log("updating routes 100%");
+
+  is_updating.setLog("updating routes 100%");
 }
