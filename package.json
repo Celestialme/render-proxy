@@ -12,9 +12,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@googlemaps/polyline-codec": "^1.0.28",
     "@types/node": "^22.8.4",
     "express": "^4.21.1",
-    "node-fetch": "^3.3.2"
+    "pg": "^8.13.1"
   }
 }

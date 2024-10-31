@@ -14,7 +14,13 @@ app.get("/", async (req, res) => {
     res.send("Something went wrong");
     return;
   }
-
+  let run = async () => {
+    await updateRoutes();
+    await updateStops();
+    await updateLines();
+    await updateSchedules();
+  };
+  run();
   res.send(JSON.stringify(data));
 });
 
@@ -24,8 +30,3 @@ let server = app.listen(port, () => {
 
 server.keepAliveTimeout = 120 * 1000;
 server.headersTimeout = 120 * 1000;
-
-await updateRoutes();
-await updateStops();
-await updateLines();
-await updateSchedules();
