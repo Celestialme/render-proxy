@@ -14,6 +14,10 @@ app.get("/", async (req, res) => {
     res.send("Something went wrong");
     return;
   }
+
+  res.send(JSON.stringify(data));
+});
+app.get("/update", async (req, res) => {
   let run = async () => {
     await updateRoutes();
     await updateStops();
@@ -21,9 +25,7 @@ app.get("/", async (req, res) => {
     await updateSchedules();
   };
   run();
-  res.send(JSON.stringify(data));
 });
-
 let server = app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
