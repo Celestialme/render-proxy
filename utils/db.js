@@ -9,6 +9,9 @@ export async function query(sql) {
     console.log(err);
   });
   await client.end();
+  if (resp instanceof Array) {
+    return resp.map((r) => r.rows || []);
+  }
   return resp?.rows || [];
 }
 
