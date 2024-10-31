@@ -1,7 +1,7 @@
 import { query } from "./db.js";
 import { _fetch } from "./utils.js";
 
-export async function updateRoutes() {
+export async function updateRoutes(is_updating) {
   console.log("updating routes 0%");
   let url = "https://transit.ttc.com.ge/pis-gateway/api/v2/routes?modes=BUS";
   const data = await _fetch(url);

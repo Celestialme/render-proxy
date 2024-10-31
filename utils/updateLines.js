@@ -2,10 +2,14 @@ import { query } from "./db.js";
 import { _fetch, sleep } from "./utils.js";
 
 let index = 1;
-export async function updateLines() {
+export async function updateLines(is_updating) {
   let routes = await query(` SELECT id,route FROM routes;`);
   let values = [];
   for (let r of routes) {
+    if (is_updating.value === false) {
+      console.log("Updating lines interrupted");
+      break;
+    }
     console.log(`updating polylines ${Math.floor((index * 100) / routes.length)}%`);
     index++;
     let route = r.route;

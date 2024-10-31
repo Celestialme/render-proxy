@@ -1,12 +1,16 @@
 import { query } from "./db.js";
 import { _fetch, sleep } from "./utils.js";
 
-export async function updateSchedules() {
+export async function updateSchedules(is_updating) {
   let routes = await query(` SELECT id,route FROM routes;`);
   let descriptionsValue = [];
   let schedulesValue = [];
   let index = 1;
   for (let r of routes) {
+    if (is_updating.value === false) {
+      console.log("Updating schedules interrupted");
+      break;
+    }
     console.log(`updating schedules ${Math.floor((index * 100) / routes.length)}%`);
     index++;
     let route = r.route;
