@@ -22,4 +22,4 @@ const createTableQuery = `
       CREATE TABLE IF NOT EXISTS descriptions (route TEXT,description TEXT,forward INTEGER);
       CREATE TABLE IF NOT EXISTS lines (route TEXT, forward INTEGER, polyline TEXT);
 `;
-// await query(createTableQuery);
+await query(createTableQuery);
