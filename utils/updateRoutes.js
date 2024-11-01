@@ -15,8 +15,9 @@ export async function updateRoutes(is_updating) {
     values.push(`('${route.id}','${route.shortName}', '${route.longName}')`);
   }
   if (values.length === 0) return;
+
+  await query(`truncate routes;`);
   await query(`
-    truncate routes;
     INSERT INTO routes(id,route,name) VALUES ${values.join(",")};
     `);
 

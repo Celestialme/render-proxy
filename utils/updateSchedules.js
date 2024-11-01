@@ -29,28 +29,18 @@ export async function updateSchedules(is_updating) {
       if (!schedule) continue;
       for (let weekdaySchedule of schedule.weekdaySchedules) {
         for (let stop of weekdaySchedule.stops) {
-          schedulesValue.push(`('${route}','${weekdaySchedule.fromDay}','${weekdaySchedule.toDay}','${stop.id.replaceAll("1:", "")}','${stop.arrivalTimes}','${forward}')`);
+          schedulesValue.push(`('${route}','${weekdaySchedule.from_day}','${weekdaySchedule.to_day}','${stop.id.replaceAll("1:", "")}','${stop.arrivalTimes}','${forward}')`);
         }
       }
     }
   }
 
-  await query(`
-    ${
-      schedulesValue.length !== 0
-        ? `
-        truncate schedules;
-        INSERT INTO schedules(route,fromDay,toDay,stopID,arrival,forward) VALUES ${schedulesValue.join(",")};
-        `
-        : ""
-    }
-    ${
-      descriptionsValue.length !== 0
-        ? `
-        truncate descriptions;
-        INSERT INTO descriptions(route,description,forward) VALUES ${descriptionsValue.join(",")};
-        `
-        : ""
-    }
-    `);
+  if (schedulesValue.length != 0) {
+    await query(`truncate schedules;`);
+    await query(`INSERT INTO schedules(route,from_day,to_day,stop_id,arrival,forward) VALUES ${schedulesValue.join(",")};`);
+  }
+  if (descriptionsValue.length != 0) {
+    await query(`truncate descriptions;`);
+    await query(`INSERT INTO descriptions(route,description,forward) VALUES ${descriptionsValue.join(",")};`);
+  }
 }

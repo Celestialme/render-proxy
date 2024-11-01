@@ -3,7 +3,7 @@ import { _fetch, sleep } from "./utils.js";
 
 let index = 1;
 export async function updateLines(is_updating) {
-  let routes = await query(` SELECT id,route FROM routes;`);
+  let routes = await query(`SELECT id,route FROM routes;`);
   let values = [];
   for (let r of routes) {
     if (is_updating.value === false) {
@@ -26,7 +26,6 @@ export async function updateLines(is_updating) {
     }
   }
   if (values.length === 0) return;
-  await query(`
-    truncate lines;
-    INSERT INTO lines(route,forward,polyline) VALUES ${values.join(",")}`);
+  await query("truncate lines;");
+  await query(`INSERT INTO lines(route,forward,polyline) VALUES ${values.join(",")}`);
 }

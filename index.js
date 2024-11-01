@@ -4,6 +4,7 @@ import { updateRoutes } from "./utils/updateRoutes.js";
 import { updateSchedules } from "./utils/updateSchedules.js";
 import { updateStops } from "./utils/updateStops.js";
 import { _fetch } from "./utils/utils.js";
+import { query } from "./utils/db.js";
 const app = express();
 const port = process.env.PORT || 3000;
 let interval;
@@ -16,15 +17,58 @@ let is_updating = {
   },
 };
 app.get("/", async (req, res) => {
-  var url = "https://transit.ttc.com.ge/pis-gateway/api/v2/routes?modes=BUS";
-  const data = await _fetch(url);
-  if (!data) {
-    res.send("Something went wrong");
-    return;
-  }
-
-  res.send(JSON.stringify(data));
+  res.send("Service status OK!");
 });
+
+app.get("/db", async (req, res) => {
+  let type = req.query.type;
+
+  let data = await query(`SELECT json_agg(${type}) FROM ${type}`);
+
+  if (!data) {
+    res.status(500).send("Something went wrong");
+  } else {
+    res.send(JSON.stringify(data[0].json_agg));
+  }
+});
+
+app.get("/arrival", async (req, res) => {
+  let stopId = req.query.stopId;
+  let data = await _fetch(`https://transit.ttc.com.ge/pis-gateway/api/v2/stops/1:${stopId}/arrival-times?locale=ka&ignoreScheduledArrivalTimes=true`);
+
+  if (!data) {
+    res.status(500).send("Something went wrong");
+    return;
+  } else {
+    res.send(JSON.stringify(data));
+  }
+});
+app.get("/plan", async (req, res) => {
+  let fromPlace = req.query.fromPlace;
+  let toPlace = req.query.toPlace;
+  let modes = req.query.modes;
+  let optimize = req.query.optimize;
+  let data = await _fetch(`https://transit.ttc.com.ge/pis-gateway/api/v2/plan?fromPlace=${fromPlace}&toPlace=${toPlace}&departMode=leaveNow&modes=${modes}&optimize=${optimize}&locale=ka`);
+
+  if (!data) {
+    res.status(500).send("Something went wrong");
+    return;
+  } else {
+    res.send(JSON.stringify(data));
+  }
+});
+app.get("/busLocation", async (req, res) => {
+  let route = req.query.route;
+  let forward = req.query.forward;
+  let data = await _fetch(`https://transit.ttc.com.ge/pis-gateway/api/v2/routes/${route}/positions?forward=${forward}`);
+  if (!data) {
+    res.status(500).send("Something went wrong");
+    return;
+  } else {
+    res.send(JSON.stringify(data));
+  }
+});
+
 app.get("/update", async (req, res) => {
   if (is_updating.value === true) {
     res.send("update in progress \n" + is_updating.log);

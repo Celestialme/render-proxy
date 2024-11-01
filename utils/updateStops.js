@@ -13,13 +13,13 @@ export async function updateStops(is_updating) {
   data = data.filter((r) => r.vehicleMode === "BUS");
   let values = [];
   for (let stop of data) {
-    values.push(`('${stop.id}','${stop.name}', '${stop.lat}','${stop.lon}')`);
+    values.push(`('${stop.code}','${stop.name}', '${stop.lat}','${stop.lon}')`);
   }
 
   if (values.length === 0) return;
+  await query(`truncate stops;`);
   await query(`
-		truncate stops;
-		INSERT INTO stops(stopID, name, lat, lon) VALUES ${values.join(",")}
+		INSERT INTO stops(stop_id, name, lat, lon) VALUES ${values.join(",")}
 		`);
 
   is_updating.setLog("updating stops 100%");
