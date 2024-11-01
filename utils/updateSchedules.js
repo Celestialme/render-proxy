@@ -29,7 +29,7 @@ export async function updateSchedules(is_updating) {
       if (!schedule) continue;
       for (let weekdaySchedule of schedule.weekdaySchedules) {
         for (let stop of weekdaySchedule.stops) {
-          schedulesValue.push(`('${route}','${weekdaySchedule.from_day}','${weekdaySchedule.to_day}','${stop.id.replaceAll("1:", "")}','${stop.arrivalTimes}','${forward}')`);
+          schedulesValue.push(`('${route}','${weekdaySchedule.fromDay}','${weekdaySchedule.toDay}','${stop.id.replaceAll("1:", "")}','${stop.arrivalTimes}','${forward}')`);
         }
       }
     }

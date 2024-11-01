@@ -1,8 +1,8 @@
 import { query } from "./db.js";
 import { _fetch, sleep } from "./utils.js";
 
-let index = 1;
 export async function updateLines(is_updating) {
+  let index = 1;
   let routes = await query(`SELECT id,route FROM routes;`);
   let values = [];
   for (let r of routes) {
