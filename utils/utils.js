@@ -4,7 +4,12 @@ export async function _fetch(url) {
     if (resp.status !== 200) {
       resolve(null);
     } else {
+      try{
       resolve(await resp.json());
+      }catch(e){
+        console.log(await resp.text)
+        resolve(null)
+      }
     }
   });
 }
