@@ -34,6 +34,7 @@ app.get("/db", async (req, res) => {
 
 app.get("/arrival", async (req, res) => {
   let stopId = req.query.stopId;
+  console.log("getting stop for: ",stopId)
   let data = await _fetch(`https://transit.ttc.com.ge/pis-gateway/api/v2/stops/1:${stopId}/arrival-times?locale=ka&ignoreScheduledArrivalTimes=true`);
 
   if (!data) {
