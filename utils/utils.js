@@ -4,10 +4,11 @@ export async function _fetch(url) {
     if (resp.status !== 200) {
       resolve(null);
     } else {
+      let response = await resp.text()
       try{
-      resolve(await resp.json());
+      resolve(JSON.parse(response));
       }catch(e){
-        console.log(await resp.text())
+        console.log(response)
         resolve(null)
       }
     }
