@@ -6,8 +6,8 @@ export async function _fetch(url) {
     } else {
       let response = await resp.text()
       console.log(res.status);
-console.log(res.headers.get("content-type"));
-console.log(res.headers.get("content-encoding"));
+console.log(resp.headers.get("content-type"));
+console.log(resp.headers.get("content-encoding"));
       try{
       resolve(JSON.parse(response));
       }catch(e){
