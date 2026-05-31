@@ -22,7 +22,7 @@ export let sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const apiKey = "c0a2f304-551a-4d08-b8df-2c53ecd57f9f";
 let headers = {
   accept: "application/json, text/plain, */*",
-  "accept-encoding": "gzip, deflate, br, zstd",
+  "accept-encoding": "gzip, deflate",
   "accept-language": "en-US,en;q=0.9,ka;q=0.8",
   "cache-control": "no-cache",
   connection: "keep-alive",
