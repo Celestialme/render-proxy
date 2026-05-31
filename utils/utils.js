@@ -7,7 +7,7 @@ export async function _fetch(url) {
       try{
       resolve(await resp.json());
       }catch(e){
-        console.log(await resp.text)
+        console.log(await resp.text())
         resolve(null)
       }
     }
