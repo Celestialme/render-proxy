@@ -4,13 +4,9 @@ export async function _fetch(url) {
     if (resp.status !== 200) {
       resolve(null);
     } else {
-      let response = await resp.text()
-console.log(resp.headers.get("content-type"));
-console.log(resp.headers.get("content-encoding"));
-      try{
-      resolve(JSON.parse(response));
+          try{
+      resolve(await resp.json());
       }catch(e){
-        console.log(response)
         resolve(null)
       }
     }
