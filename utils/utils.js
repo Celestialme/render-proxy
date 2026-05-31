@@ -5,7 +5,6 @@ export async function _fetch(url) {
       resolve(null);
     } else {
       let response = await resp.text()
-      console.log(res.status);
 console.log(resp.headers.get("content-type"));
 console.log(resp.headers.get("content-encoding"));
       try{
